@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Loading from "../components/Loading";
 
 function Student(){
 
@@ -18,9 +19,7 @@ function Student(){
 
     if(loading){
         return (
-            <div>
-                Loading...
-            </div>
+            <Loading />
         )
     }
 
