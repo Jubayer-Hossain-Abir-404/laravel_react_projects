@@ -50,7 +50,7 @@ function Student(){
             <div className="card">
               <div className="card-header">
                 <h4>Students List</h4>
-                <Link to="/" className="btn btn-primary float-end">
+                <Link to="/students/create" className="btn btn-primary float-end">
                   Add Student
                 </Link>
               </div>
