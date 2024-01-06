@@ -17,7 +17,35 @@ function StudentCreate(){
                   </Link>
                 </div>
                 <div className="card-body">
-
+                  <form>
+                    <div className="mb-3">
+                      <label>Name</label>
+                      <input type="text" name="name" className="form-control"/>
+                    </div>
+                    <div className="mb-3">
+                      <label>Email</label>
+                      <input type="text" name="email" className="form-control"/>
+                    </div>
+                    <div className="mb-3">
+                      <label>Phone</label>
+                      <input type="text" name="phone" className="form-control"/>
+                    </div>
+                    <div className="mb-3">
+                      <label>Course</label>
+                      <input type="text" name="course" className="form-control"/>
+                    </div>
+                    <div className="mb-3">
+                      <label>Course</label>
+                      <input type="text" name="course" className="form-control"/>
+                    </div>
+                    <div className="mb-3">
+                      <label>Course</label>
+                      <input type="text" name="course" className="form-control"/>
+                    </div>
+                    <div className="mb-3">
+                      <button type="submit"  className="btn btn-primary">Save Student</button>
+                    </div>
+                  </form>
                 </div>
               </div>
             </div>
