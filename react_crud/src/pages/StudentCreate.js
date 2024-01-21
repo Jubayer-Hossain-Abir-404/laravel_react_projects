@@ -1,10 +1,11 @@
 import axios from "axios";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
 
 function StudentCreate(){
 
+  const navigate =  useNavigate();
   const [loading, setloading] = useState(false);
 
   const [inputErrorList, setInputErrorList] = useState({});
@@ -35,6 +36,7 @@ function StudentCreate(){
     axios.post(`http://localhost:8000/api/students`, data).then(
       res => {
         alert(res.data.message);
+        navigate('/students');
         setloading(false);
       })
       .catch(function (error){
