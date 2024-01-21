@@ -16,6 +16,35 @@ function Student(){
         });
     }, []);
 
+    const deleteStudent = (e, id) => {
+      e.preventDefault();
+
+      const thisClicked = e.currentTarget;
+      thisClicked.innerText = "Deleting...";
+
+      axios
+        .delete(`http://localhost:8000/api/students/${id}/delete`)
+        .then((res) => {
+          alert(res.data.message);
+          thisClicked.closest("tr").remove();
+        })
+        .catch(function (error) {
+          if (error.response) {
+            if (error.response.status === 400) {
+              alert(error.response.data.message);
+              thisClicked.innerText = "Deleting";
+            }
+
+            if (error.response.status === 500) {
+              alert(error.response.data);
+              thisClicked.innerText = "Deleting";
+            }
+          }
+        });
+
+
+    }
+
 
     if(loading){
         return (
@@ -37,7 +66,7 @@ function Student(){
                     <Link to={`/students/${item.id}/edit`} className="btn btn-success">Edit</Link>
                 </td>
                 <td>
-                    <Link to="/" className="btn btn-danger">Delete</Link>
+                    <button type="button" className="btn btn-danger" onClick={(e) => deleteStudent(e, item.id)}>Delete</button>
                 </td>
             </tr>
         )

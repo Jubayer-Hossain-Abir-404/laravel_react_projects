@@ -85,7 +85,7 @@ function StudentEdit(){
   if(Object.keys(student).length === 0){
     return(
       <div className="container">
-        <h4>No such stduent Id Found</h4>
+        <h4>No such student Id Found</h4>
       </div>
     )
   }
