@@ -34,7 +34,7 @@ function Student(){
                 <td>{item.email}</td>
                 <td>{item.phone}</td>
                 <td>
-                    <Link to="/" className="btn btn-success">Edit</Link>
+                    <Link to={`/students/${item.id}/edit`} className="btn btn-success">Edit</Link>
                 </td>
                 <td>
                     <Link to="/" className="btn btn-danger">Delete</Link>
