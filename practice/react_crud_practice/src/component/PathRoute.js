@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import About from "../pages/About";
 import Students from "../pages/Students";
 import StudentAdd from "../pages/StudentAdd";
+import StudentEdit from "../pages/StudentEdit";
 
 const PathRoute = () => {
   return (
@@ -12,6 +13,7 @@ const PathRoute = () => {
       <Route path="/about" element={<About />}></Route>
       <Route path="/students" element={<Students />}></Route>
       <Route path="/students/add" element={<StudentAdd />}></Route>
+      <Route path="/students/:id/edit" element={<StudentEdit />}></Route>
     </Routes>
   );
 };

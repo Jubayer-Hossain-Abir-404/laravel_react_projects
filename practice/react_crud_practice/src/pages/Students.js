@@ -37,6 +37,7 @@ const Students = () => {
                 <th scope="col">Email</th>
                 <th scope="col">Phone</th>
                 <th scope="col">Course</th>
+                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -47,6 +48,18 @@ const Students = () => {
                   <td>{user.email}</td>
                   <td>{user.phone}</td>
                   <td>{user.course}</td>
+                  <td>
+                    <Link
+                      class="btn btn-warning me-3"
+                      to={`/students/${user.id}/edit`}
+                      role="button"
+                    >
+                      Edit
+                    </Link>
+                    <button type="button" class="btn btn-danger">
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
