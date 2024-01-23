@@ -1,12 +1,14 @@
 import axios from 'axios';
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const StudentAdd = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [course, setCourse] = useState("");
+
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -20,6 +22,7 @@ const StudentAdd = () => {
           .post("http://127.0.0.1:8000/api/students", data)
           .then((response) => {
             alert(response.data.message);
+            navigate("/students");
           })
           .catch((err) => {
             if (err.response) {

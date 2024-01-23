@@ -16,11 +16,13 @@ const Students = () => {
         });
     },[]);
 
-    const deleteStudent = (id) => {
+    const deleteStudent = (studentId) => {
       axios
-        .delete(`http://127.0.0.1:8000/api/students/${id}/delete`)
+        .delete(`http://127.0.0.1:8000/api/students/${studentId}/delete`)
         .then((response) => {
           alert(response.data.message);
+          const element = document.getElementById("student-" + studentId);
+          element.remove(); // Removes the div with the 'div-02' id
         })
         .catch((err) => {
           if (err.response) {
@@ -34,10 +36,19 @@ const Students = () => {
         });
     }
 
+    if(students.length === 0){
+      return (
+        <div className="container mt-5 text-center">
+          <div class="spinner-border text-primary" role="status">
+          </div>
+        </div>
+      );
+    }
+
   return (
     <div className="container mt-5">
-      <div class="card">
-        <div class="card-header">
+      <div className="card">
+        <div className="card-header">
           <Link
             className="btn btn-primary float-end"
             to="/students/add"
@@ -46,7 +57,7 @@ const Students = () => {
             Add Student
           </Link>
         </div>
-        <div class="card-body">
+        <div className="card-body">
           <table className="table table-striped table-bordered">
             <thead>
               <tr>
@@ -60,7 +71,7 @@ const Students = () => {
             </thead>
             <tbody>
               {students.map((user) => (
-                <tr key={user.id}>
+                <tr key={user.id} id={`student-${user.id}`}>
                   <td>{user.id}</td>
                   <td>{user.name}</td>
                   <td>{user.email}</td>
