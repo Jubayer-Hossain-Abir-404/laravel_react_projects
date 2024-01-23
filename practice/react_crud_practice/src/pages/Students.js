@@ -16,6 +16,24 @@ const Students = () => {
         });
     },[]);
 
+    const deleteStudent = (id) => {
+      axios
+        .delete(`http://127.0.0.1:8000/api/students/${id}/delete`)
+        .then((response) => {
+          alert(response.data.message);
+        })
+        .catch((err) => {
+          if (err.response) {
+            console.log(err.response);
+            // client received an error response (5xx, 4xx)
+          } else if (err.request) {
+            // client never received a response, or request never left
+          } else {
+            // anything else
+          }
+        });
+    }
+
   return (
     <div className="container mt-5">
       <div class="card">
@@ -56,7 +74,11 @@ const Students = () => {
                     >
                       Edit
                     </Link>
-                    <button type="button" class="btn btn-danger">
+                    <button
+                      type="button"
+                      class="btn btn-danger"
+                      onClick={() => deleteStudent(user.id)}
+                    >
                       Delete
                     </button>
                   </td>
