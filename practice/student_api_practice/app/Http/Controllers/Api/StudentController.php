@@ -38,9 +38,9 @@ class StudentController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'status' => 400,
+                'status' => 422,
                 'message' => $validator->messages()
-            ], 400);
+            ], 422);
         }
 
         $student = Student::create([
@@ -58,9 +58,9 @@ class StudentController extends Controller
             ], 200);
         } else {
             return response()->json([
-                'status' => 422,
-                'message' => "Student save failed!"
-            ], 422);
+                'status' => 500,
+                'message' => "Something went wrong!"
+            ], 500);
         }
     }
 
@@ -94,9 +94,9 @@ class StudentController extends Controller
 
             if ($validator->fails()) {
                 return response()->json([
-                    'status' => 400,
+                    'status' => 422,
                     'message' => $validator->messages()
-                ], 400);
+                ], 422);
             }
 
             $student->update([
@@ -114,9 +114,9 @@ class StudentController extends Controller
                 ], 200);
             } else {
                 return response()->json([
-                    'status' => 422,
-                    'message' => "Students Update failed!"
-                ], 422);
+                    'status' => 500,
+                    'message' => "Something went wrong!!"
+                ], 500);
             }
         } else {
             return response()->json([
@@ -137,9 +137,9 @@ class StudentController extends Controller
                 ], 200);
             }else{
                 return response()->json([
-                    'status' => 422,
-                    'message' => "Students Update failed!"
-                ], 422);
+                    'status' => 500,
+                    'message' => "Something went wrong!!"
+                ], 500);
             }
         }else{
             return response()->json([

@@ -1,60 +1,58 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import Loader from "../component/Loader";
 
 const StudentEdit = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [course, setCourse] = useState("");
+  const [data, setData] = useState({});
+  const [loader, setLoader] = useState(true);
+
+  const setInputData = (e) => {
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
 
   const params = useParams()
 
   useEffect(() => {
-    axios
-      .get(`http://127.0.0.1:8000/api/students/${params.id}/edit`)
-      .then((response) => {
-        setName(response.data.student.name);
-        setEmail(response.data.student.email);
-        setPhone(response.data.student.phone);
-        setCourse(response.data.student.course);
-      })
-      .catch((error) => {
-        console.log(error.response.data.message);
-      });
+      axios
+        .get(`http://127.0.0.1:8000/api/students/${params.id}/edit`)
+        .then((response) => {
+          setData(response.data.student);
+          setLoader(false);
+        })
+        .catch((error) => {
+          setLoader(false);
+          console.log(error.response.data.message);
+        });
   }, [params.id]);
+
 
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let data = {
-      name: name,
-      email: email,
-      phone: phone,
-      course: course,
-    };
+    setLoader(true);
     axios
       .put(`http://127.0.0.1:8000/api/students/${params.id}/edit`, data)
       .then((response) => {
         alert(response.data.message);
+        setLoader(false);
       })
       .catch((err) => {
         if (err.response) {
+          setLoader(false);
           console.log(err.response);
-          // client received an error response (5xx, 4xx)
-        } else if (err.request) {
-          // client never received a response, or request never left
-        } else {
-          // anything else
         }
       });
   };
   
+  if (loader) {
+    return <Loader />;
+  }
   return (
     <div className="container mt-5">
       <div className="card">
         <div className="card-header">
-            Edit Student
+          Edit Student
           <Link
             className="btn btn-danger float-end"
             to="/students"
@@ -66,7 +64,7 @@ const StudentEdit = () => {
         <div className="card-body">
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label for="name" className="form-label">
+              <label htmlFor="name" className="form-label">
                 Name
               </label>
               <input
@@ -74,12 +72,12 @@ const StudentEdit = () => {
                 className="form-control"
                 id="name"
                 name="name"
-                onChange={(e) => setName(e.target.value)}
-                value={name}
+                onChange={(e) => setInputData(e)}
+                value={data.name ?? ""}
               />
             </div>
             <div className="mb-3">
-              <label for="email" className="form-label">
+              <label htmlFor="email" className="form-label">
                 Email address
               </label>
               <input
@@ -87,12 +85,12 @@ const StudentEdit = () => {
                 className="form-control"
                 id="email"
                 name="email"
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
+                onChange={(e) => setInputData(e)}
+                value={data.email ?? ""}
               />
             </div>
             <div className="mb-3">
-              <label for="course" className="form-label">
+              <label htmlFor="course" className="form-label">
                 Course
               </label>
               <input
@@ -100,12 +98,12 @@ const StudentEdit = () => {
                 className="form-control"
                 id="course"
                 name="course"
-                onChange={(e) => setCourse(e.target.value)}
-                value={course}
+                onChange={(e) => setInputData(e)}
+                value={data.course ?? ""}
               />
             </div>
             <div className="mb-3">
-              <label for="phone" className="form-label">
+              <label htmlFor="phone" className="form-label">
                 Phone
               </label>
               <input
@@ -113,8 +111,8 @@ const StudentEdit = () => {
                 className="form-control"
                 id="phone"
                 name="phone"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={(e) => setInputData(e)}
+                value={data.phone ?? ""}
               />
             </div>
             <button type="submit" className="btn btn-primary">
