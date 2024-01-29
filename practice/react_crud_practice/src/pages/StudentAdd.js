@@ -5,6 +5,8 @@ import {
 } 
   from 'react-router-dom';
 import Loader from '../component/Loader';
+import { toast } from 'react-toastify';
+import Toast from "react-bootstrap/Toast";
 
 const StudentAdd = () => {
     const [data, setData] = useState({});
@@ -33,6 +35,16 @@ const StudentAdd = () => {
                 setLoader(false);
                 if (err.response.status === 422) {
                   setErrorMessage(err.response.data.message);
+                }else if(err.response.status === 500){
+                  // toast.error(err.response.data.message, {
+                  //   autoClose: 15000,
+                  // });
+                  toast("Hello Geeks");
+                  // toast.error(err.response.data.message, {
+                  //   // Set to 15sec
+                  //   // position: toast.POSITION.BOTTOM_LEFT,
+                  //   autoClose: 15000,
+                  // });
                 }
             }
           });
