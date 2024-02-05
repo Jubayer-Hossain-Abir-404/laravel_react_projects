@@ -3,20 +3,10 @@ import Toast from "react-bootstrap/Toast";
 function ContextualExample() {
   return (
     <>
-      {[
-        "Primary",
-        "Secondary",
-        "Success",
-        "Danger",
-        "Warning",
-        "Info",
-        "Light",
-        "Dark",
-      ].map((variant, idx) => (
+      {
         <Toast
-          className="d-inline-block m-1"
-          bg={variant.toLowerCase()}
-          key={idx}
+          className="d-inline-block m-2 float-end"
+          bg={"Danger".toLowerCase()}
         >
           <Toast.Header>
             <img
@@ -24,14 +14,13 @@ function ContextualExample() {
               className="rounded me-2"
               alt=""
             />
-            <strong className="me-auto">Bootstrap</strong>
-            <small>11 mins ago</small>
+            <strong className="me-auto">Message</strong>
           </Toast.Header>
-          <Toast.Body className={variant === "Dark" && "text-white"}>
+          <Toast.Body className="Dark text-white">
             Hello, world! This is a toast message.
           </Toast.Body>
         </Toast>
-      ))}
+      }
     </>
   );
 }
