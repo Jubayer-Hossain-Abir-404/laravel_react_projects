@@ -6,7 +6,7 @@ const Toaster = () => {
     <>
       {
         <Toast
-          className="d-inline-block m-2 float-end"
+          className="d-inline-block m-2 position-absolute end-0"
           bg={"Danger".toLowerCase()}
         >
           <Toast.Header>
