@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Toast from "react-bootstrap/Toast";
 
-const Toaster = () => {
+const Toaster = (props) => {
+  const [show, setShow] = useState(props.data.state);
+  
   return (
     <>
       {
         <Toast
           className="d-inline-block m-2 position-absolute end-0"
-          bg={"Danger".toLowerCase()}
+          bg={props.data.toastBg.toLowerCase()}
+          onClose={() => setShow(false)}
+          show={show}
+          delay={3000}
+          autohide
         >
           <Toast.Header>
             <img
@@ -15,10 +21,10 @@ const Toaster = () => {
               className="rounded me-2"
               alt=""
             />
-            <strong className="me-auto">Message</strong>
+            <strong className="me-auto">{props.data.toastHeader}</strong>
           </Toast.Header>
           <Toast.Body className="Dark text-white">
-            Hello, world! This is a toast message.
+            {props.data.toastBodyMessage}
           </Toast.Body>
         </Toast>
       }
