@@ -19,12 +19,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/students', [StudentController::class, 'index']);
+Route::group(['middleware' => ['XssSanitizer']], function () {
+    Route::get('/students', [StudentController::class, 'index']);
 
-Route::post('/students', [StudentController::class, 'store']);
+    Route::post('/students', [StudentController::class, 'store']);
 
-Route::get('/students/{id}/edit', [StudentController::class, 'edit']);
+    Route::get('/students/{id}/edit', [StudentController::class, 'edit']);
 
-Route::put('/students/{id}/edit', [StudentController::class, 'update']);
+    Route::put('/students/{id}/edit', [StudentController::class, 'update']);
 
-Route::delete('/students/{id}/delete', [StudentController::class, 'delete']);
+    Route::delete('/students/{id}/delete', [StudentController::class, 'delete']);
+});

@@ -10,16 +10,17 @@ use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         $students = Student::all();
 
-        if(count($students) > 0){
+        if (count($students) > 0) {
             return response()->json([
                 'status' => 200,
                 'students' => $students,
                 "message" => "Students data found"
-            ],200);
-        }else{
+            ], 200);
+        } else {
             return response()->json([
                 'status' => 404,
                 "message" => "Students data not found"
@@ -29,11 +30,17 @@ class StudentController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'name' => 'required|max:191',
             'email' => 'required|email|max:191',
             'phone' => 'required|digits:11|numeric',
             'course' => 'required|max:191',
+            'file' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:5000',
+            'degree_type' => 'nullable|numeric',
+            'gender' => 'nullable|max:1',
+            'countries' => 'nullable|array',
+            "countries.*" => "nullable|string|distinct|min:2",
+            'range' => 'nullable|numeric',
         ]);
 
         if ($validator->fails()) {
@@ -43,14 +50,16 @@ class StudentController extends Controller
             ], 422);
         }
 
+
+
         $file = $request->file('file');
         $save_file = null;
-        if(!empty($file)){
+        if (!empty($file)) {
             $file_name = rand(123456, 999999) . '.' . $file->getClientOriginalExtension();
             $file_path = public_path('student_files');
             $file->move($file_path, $file_name);
             $base_url = url('/');
-            $save_file = $base_url. '/'. 'student_files/' . $file_name;
+            $save_file = $base_url . '/' . 'student_files/' . $file_name;
         }
 
         $student = new Student();
@@ -59,6 +68,13 @@ class StudentController extends Controller
         $student->phone = $request->phone;
         $student->course = $request->course;
         $student->file = $save_file;
+
+        $student->isMarried = $request->isMarried;
+        $student->degree_type = $request->degree_type;
+        $student->gender = $request->gender;
+
+        $student->countries = implode(",",$request->countries);
+        $student->range = $request->range;
 
         $response = $student->save();
 
@@ -76,7 +92,8 @@ class StudentController extends Controller
         }
     }
 
-    public function edit($id){
+    public function edit($id)
+    {
         $student = Student::find($id);
 
         if ($student) {
@@ -138,22 +155,23 @@ class StudentController extends Controller
         }
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         $student = Student::find($id);
         if ($student) {
             $result = $student->delete();
-            if($result){
+            if ($result) {
                 return response()->json([
                     'status' => 200,
                     'message' => "Student Deleted Successfully"
                 ], 200);
-            }else{
+            } else {
                 return response()->json([
                     'status' => 500,
                     'message' => "Something went wrong!!"
                 ], 500);
             }
-        }else{
+        } else {
             return response()->json([
                 'status' => 404,
                 'message' => "Student Data not found!"
