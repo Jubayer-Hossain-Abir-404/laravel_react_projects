@@ -43,17 +43,29 @@ class StudentController extends Controller
             ], 422);
         }
 
-        $student = Student::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'course' => $request->course
-        ]);
+        $file = $request->file('file');
+        $save_file = null;
+        if(!empty($file)){
+            $file_name = rand(123456, 999999) . '.' . $file->getClientOriginalExtension();
+            $file_path = public_path('student_files');
+            $file->move($file_path, $file_name);
+            $base_url = url('/');
+            $save_file = $base_url. '/'. 'student_files/' . $file_name;
+        }
 
-        if ($student) {
+        $student = new Student();
+        $student->name = $request->name;
+        $student->email = $request->email;
+        $student->phone = $request->phone;
+        $student->course = $request->course;
+        $student->file = $save_file;
+
+        $response = $student->save();
+
+        if ($response) {
             return response()->json([
                 'status' => 200,
-                'student' => $student,
+                'student' => $response,
                 'message' => "Student Created Successfully"
             ], 200);
         } else {
