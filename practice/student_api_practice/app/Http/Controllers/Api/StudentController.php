@@ -10,6 +10,10 @@ use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
+    private $base_url;
+    public function __construct(){
+        $this->base_url = url('/');
+    }
     public function index()
     {
         $students = Student::all();
@@ -50,16 +54,13 @@ class StudentController extends Controller
             ], 422);
         }
 
-
-
         $file = $request->file('file');
         $save_file = null;
         if (!empty($file)) {
             $file_name = rand(123456, 999999) . '.' . $file->getClientOriginalExtension();
             $file_path = public_path('student_files');
             $file->move($file_path, $file_name);
-            $base_url = url('/');
-            $save_file = $base_url . '/' . 'student_files/' . $file_name;
+            $save_file = $this->base_url . '/' . 'student_files/' . $file_name;
         }
 
         $student = new Student();
@@ -118,7 +119,13 @@ class StudentController extends Controller
                 'name' => 'required|max:191',
                 'email' => 'required|email|max:191',
                 'phone' => 'required|digits:11|numeric',
-                'course' => 'required|max:191'
+                'course' => 'required|max:191',
+                'file' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:5000',
+                'degree_type' => 'nullable|numeric',
+                'gender' => 'nullable|max:1',
+                'countries' => 'nullable|array',
+                "countries.*" => "nullable|string|distinct|min:2",
+                'range' => 'nullable|numeric',
             ]);
 
             if ($validator->fails()) {
@@ -128,14 +135,35 @@ class StudentController extends Controller
                 ], 422);
             }
 
-            $student->update([
-                'name' => $request->name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'course' => $request->course
-            ]);
+            if ($request->hasFile('file')) {
+                if(!empty($student->file)){
+                    $url_info = parse_url($student->file);
+                    if(isset($url_info['path']) && !empty($url_info['path'])){
+                        if (file_exists( public_path() . $url_info['path'])){
+                            unlink(public_path($url_info['path']));
+                        }
+                    }
+                }
+                $file = $request->file('file');
+                $file_name = rand(123456, 999999) . '.' . $file->getClientOriginalExtension();
+                $file_path = public_path('student_files');
+                $file->move($file_path, $file_name);
+                $student->file = $this->base_url . '/' . 'student_files/' . $file_name;
+            }
 
-            if ($student) {
+            $student->name = $request->name;
+            $student->email = $request->email;
+            $student->phone = $request->phone;
+            $student->course = $request->course;
+
+            $student->isMarried = $request->isMarried;
+            $student->degree_type = $request->degree_type;
+            $student->gender = $request->gender;
+
+            $student->countries = implode(",", $request->countries);
+            $student->range = $request->range;
+
+            if ($student->update()) {
                 return response()->json([
                     'status' => 200,
                     'student' => $student,
