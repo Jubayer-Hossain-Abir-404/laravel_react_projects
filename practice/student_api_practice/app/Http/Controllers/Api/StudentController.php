@@ -70,13 +70,12 @@ class StudentController extends Controller
         $student->course = $request->course;
         $student->file = $save_file;
 
-        $student->isMarried = $request->isMarried;
-        $student->degree_type = $request->degree_type;
-        $student->gender = $request->gender;
+        $student->isMarried = $request->isMarried ?? 0;
+        $student->degree_type = $request->degree_type ?? null;
+        $student->gender = $request->gender ?? null;
 
-        $student->countries = implode(",",$request->countries);
-        $student->range = $request->range;
-
+        $student->countries = !empty($request->countries) ? implode(",", $request->countries) : null;
+        $student->range = $request->range ?? 0;
         $response = $student->save();
 
         if ($response) {
@@ -156,13 +155,23 @@ class StudentController extends Controller
             $student->phone = $request->phone;
             $student->course = $request->course;
 
-            $student->isMarried = $request->isMarried;
-            $student->degree_type = $request->degree_type;
-            $student->gender = $request->gender;
+            if(!empty($request->isMarried)){
+                $student->isMarried = $request->isMarried;
+            }
+            if(!empty($request->degree_type)){
+                $student->degree_type = $request->degree_type;
+            }
 
-            $student->countries = implode(",", $request->countries);
-            $student->range = $request->range;
+            if(!empty($request->gender)){
+                $student->gender = $request->gender;
+            }
 
+            if(!empty($request->countries)){
+                $student->countries = implode(",", $request->countries);
+            }
+            if(!empty($request->range)){
+                $student->range = $request->range;
+            }
             if ($student->update()) {
                 return response()->json([
                     'status' => 200,

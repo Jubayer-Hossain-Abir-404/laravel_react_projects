@@ -35,7 +35,7 @@ const StudentAdd = () => {
           toastHeader: "Success",
           toastBodyMessage: response.data.message,
         });
-        navigate("/students");
+        //navigate("/students");
       })
       .catch((err) => {
         if (err.response) {
