@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link
+  // , useNavigate 
+} from "react-router-dom";
 import Loader from "../component/Loader";
 import Toaster from "../component/Toaster";
 
@@ -20,7 +22,7 @@ const StudentAdd = () => {
 
   const [errorMessage, setErrorMessage] = useState();
 
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -68,7 +70,7 @@ const StudentAdd = () => {
   }
   return (
     <>
-      {toaster.state && <Toaster data = {toaster}/>}
+      {toaster.state && <Toaster data={toaster} />}
 
       <div className="container mt-5">
         <div className="d-flex justify-content-center">
@@ -147,6 +149,28 @@ const StudentAdd = () => {
                   />
                   {errorMessage && (
                     <span className="text-danger">{errorMessage.phone}</span>
+                  )}
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="phone" className="form-label">
+                    Degree Type
+                  </label>
+                  <select
+                    className="form-select"
+                    aria-label="Small select example"
+                    id="degree_type"
+                    name="degree_type"
+                    onChange={(e) => setInputData(e)}
+                    value={data.degree_type ?? ""}
+                  >
+                    <option selected>Select</option>
+                    <option value="1">BSC</option>
+                    <option value="2">MSC</option>
+                  </select>
+                  {errorMessage && (
+                    <span className="text-danger">
+                      {errorMessage.degree_type}
+                    </span>
                   )}
                 </div>
                 <button type="submit" className="btn btn-primary">
