@@ -1,12 +1,24 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link
-  // , useNavigate 
+  , useNavigate 
 } from "react-router-dom";
 import Loader from "../component/Loader";
 import Toaster from "../component/Toaster";
+import { MultiSelect } from "react-multi-select-component";
 
 const StudentAdd = () => {
+  const countries = [
+    { label: "Bangladesh", value: "BD" },
+    { label: "India", value: "IND" },
+    { label: "USA", value: "USA" },
+    { label: "Nepal", value: "NEP" },
+    { label: "UK", value: "UK" },
+    { label: "Pakistan", value: "PAK" },
+  ];
+
+  const [selected, setSelected] = useState([]);
+
   const [data, setData] = useState({});
   const [loader, setLoader] = useState(false);
   const [toaster, setToaster] = useState({
@@ -22,44 +34,46 @@ const StudentAdd = () => {
 
   const [errorMessage, setErrorMessage] = useState();
 
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoader(true);
+    let selectedCountries = [];
+    if (selected.length > 0) {
+      selectedCountries = selected.map((x) => x.value);
+      setData({ ...data, countries: selectedCountries });
+    }
     axios
-      .post("http://127.0.0.1:8000/api/students", data)
+      .post("http://127.0.0.1:8000/api/students", {
+        ...data,
+        countries: selectedCountries,
+      })
       .then((response) => {
         setLoader(false);
-        setToaster({
-          state: true,
-          toastBg: "Success",
-          toastHeader: "Success",
-          toastBodyMessage: response.data.message,
-        });
-        //navigate("/students");
+        if (response.data.status === 200) {
+          setToaster({
+            state: true,
+            toastBg: "Success",
+            toastHeader: "Success",
+            toastBodyMessage: response.data.message,
+          });
+          navigate("/students");
+        }
       })
       .catch((err) => {
         if (err.response) {
           setLoader(false);
           if (err.response.status === 422) {
             setErrorMessage(err.response.data.message);
-          } 
-          // else if (err.response.status === 500) {
-          //     setToaster({
-          //       state: true,
-          //       toastBg: "Danger",
-          //       toastHeader: "Error",
-          //       toastBodyMessage: err.response.data.message,
-          //     });
-          // } 
+          }
           else {
-           setToaster({
-             state: true,
-             toastBg: "Danger",
-             toastHeader: "Error",
-             toastBodyMessage: err.response.data.message,
-           });
+            setToaster({
+              state: true,
+              toastBg: "Danger",
+              toastHeader: "Error",
+              toastBodyMessage: err.response.data.message,
+            });
           }
         }
       });
@@ -152,7 +166,7 @@ const StudentAdd = () => {
                   )}
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="phone" className="form-label">
+                  <label htmlFor="degree_type" className="form-label">
                     Degree Type
                   </label>
                   <select
@@ -163,7 +177,7 @@ const StudentAdd = () => {
                     onChange={(e) => setInputData(e)}
                     value={data.degree_type ?? ""}
                   >
-                    <option selected>Select</option>
+                    <option value="0">Select</option>
                     <option value="1">BSC</option>
                     <option value="2">MSC</option>
                   </select>
@@ -171,6 +185,32 @@ const StudentAdd = () => {
                     <span className="text-danger">
                       {errorMessage.degree_type}
                     </span>
+                  )}
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="countries" className="form-label">
+                    Select Countries
+                  </label>
+                  <MultiSelect
+                    options={countries}
+                    value={selected}
+                    onChange={setSelected}
+                    labelledBy="Select"
+                  />
+                  {errorMessage && (
+                    <div className="text-danger">
+                      {Object.keys(errorMessage).map((key) => {
+                        if (key.startsWith("countries")) {
+                          return errorMessage[key].map((error, index) => (
+                            <span key={index}>
+                              {error}
+                              <br />
+                            </span>
+                          ));
+                        }
+                        return null;
+                      })}
+                    </div>
                   )}
                 </div>
                 <button type="submit" className="btn btn-primary">
