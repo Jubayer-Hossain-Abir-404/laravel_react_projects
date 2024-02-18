@@ -36,6 +36,14 @@ const StudentAdd = () => {
 
   const navigate = useNavigate();
 
+  const [file, setFile] = useState(
+    "https://as1.ftcdn.net/v2/jpg/05/72/90/54/1000_F_572905428_MwCL0yVHtIUbTGKBQGq0Z2PKuNEdtRLo.jpg"
+  );
+  const handleFileChange = (e) => {
+    setFile(URL.createObjectURL(e.target.files[0]));
+    setData({ ...data, file: e.target.files[0] });
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoader(true);
@@ -44,6 +52,8 @@ const StudentAdd = () => {
       selectedCountries = selected.map((x) => x.value);
       setData({ ...data, countries: selectedCountries });
     }
+    console.log(data);
+    //return;
     axios
       .post("http://127.0.0.1:8000/api/students", {
         ...data,
@@ -86,7 +96,7 @@ const StudentAdd = () => {
     <>
       {toaster.state && <Toaster data={toaster} />}
 
-      <div className="container mt-5">
+      <div className="container my-5">
         <div className="d-flex justify-content-center">
           <div className="card col-6">
             <div className="card-header">
@@ -211,6 +221,31 @@ const StudentAdd = () => {
                         return null;
                       })}
                     </div>
+                  )}
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="file" className="form-label">
+                    Image Upload
+                  </label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    id="file"
+                    name="file"
+                    onChange={handleFileChange}
+                  />
+                  {file && (
+                    <img
+                      className="my-2"
+                      src={file}
+                      width={"180px"}
+                      height={"160px"}
+                      alt="Display"
+                    />
+                  )}
+                  <br/>
+                  {errorMessage && (
+                    <span className="text-danger">{errorMessage.file}</span>
                   )}
                 </div>
                 <button type="submit" className="btn btn-primary">
