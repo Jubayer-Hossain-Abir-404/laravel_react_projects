@@ -28,36 +28,44 @@ const StudentAdd = () => {
     toastBodyMessage: "",
   });
 
+  
+
   const setInputData = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
+    if(e.target.name === "file"){
+      setFile(URL.createObjectURL(e.target.files[0]));
+      setData({ ...data, [e.target.name]: e.target.files[0] });
+    }else{
+      setData({ ...data, [e.target.name]: e.target.value });
+    }
   };
 
   const [errorMessage, setErrorMessage] = useState();
 
   const navigate = useNavigate();
 
+  const previewURL = "https://as1.ftcdn.net/v2/jpg/05/72/90/54/1000_F_572905428_MwCL0yVHtIUbTGKBQGq0Z2PKuNEdtRLo.jpg";
   const [file, setFile] = useState(
-    "https://as1.ftcdn.net/v2/jpg/05/72/90/54/1000_F_572905428_MwCL0yVHtIUbTGKBQGq0Z2PKuNEdtRLo.jpg"
+    previewURL
   );
-  const handleFileChange = (e) => {
-    setFile(URL.createObjectURL(e.target.files[0]));
-    setData({ ...data, file: e.target.files[0] });
-  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoader(true);
     let selectedCountries = [];
+    const formData = new FormData();
+
+    for (var key in data){
+      formData.append(key, data[key]);
+    }
+
     if (selected.length > 0) {
       selectedCountries = selected.map((x) => x.value);
-      setData({ ...data, countries: selectedCountries });
+      formData.append("countries[]", selectedCountries);
     }
-    console.log(data);
-    //return;
+
     axios
-      .post("http://127.0.0.1:8000/api/students", {
-        ...data,
-        countries: selectedCountries,
+      .post("http://127.0.0.1:8000/api/students", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       })
       .then((response) => {
         setLoader(false);
@@ -75,9 +83,9 @@ const StudentAdd = () => {
         if (err.response) {
           setLoader(false);
           if (err.response.status === 422) {
+            console.log(err.response);
             setErrorMessage(err.response.data.message);
-          }
-          else {
+          } else {
             setToaster({
               state: true,
               toastBg: "Danger",
@@ -232,7 +240,7 @@ const StudentAdd = () => {
                     className="form-control"
                     id="file"
                     name="file"
-                    onChange={handleFileChange}
+                    onChange={(e) => setInputData(e)}
                   />
                   {file && (
                     <img
@@ -243,7 +251,7 @@ const StudentAdd = () => {
                       alt="Display"
                     />
                   )}
-                  <br/>
+                  <br />
                   {errorMessage && (
                     <span className="text-danger">{errorMessage.file}</span>
                   )}

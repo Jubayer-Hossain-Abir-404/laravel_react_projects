@@ -39,8 +39,7 @@ class StudentController extends Controller
             'email' => 'required|email|max:191',
             'phone' => 'required|digits:11|numeric',
             'course' => 'required|max:191',
-            // 'file' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:5000',
-            'file' => 'nullable|max:5000',
+            'file' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:5000',
             'degree_type' => 'nullable|numeric',
             'gender' => 'nullable|max:1',
             'countries' => 'nullable|array',
@@ -51,7 +50,8 @@ class StudentController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => 422,
-                'message' => $validator->messages()
+                'message' => $validator->messages(),
+                'data' => $request->all()
             ], 422);
         }
 
