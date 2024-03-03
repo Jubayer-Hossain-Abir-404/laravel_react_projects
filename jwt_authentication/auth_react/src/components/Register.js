@@ -1,20 +1,36 @@
 import React, { useState } from "react";
 import AuthUser from "./AuthUser";
+import { useNavigate } from "react-router-dom";
 
-const Login = () => {
-  const { http, setToken } = AuthUser();
+const Register = () => {
+  const navigate = useNavigate();
+  const { http } = AuthUser();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const [name, setName] = useState();
 
   const submitForm = () => {
-    http.post("/login", { email: email, password: password }).then((res) => {
-      setToken(res.data.user, res.data.access_token)
+    http.post("/register", { email: email, password: password, name:name }).then((res) => {
+        console.log(res);
+      navigate('/login');
     });
   };
   return (
     <div className="row justify-content-center pt-5">
       <div className="col-sm-6">
         <div className="card p-4">
+          <div className="form-group mb-3">
+            <label htmlFor="exampleInputEmail1" className="form-label">
+              Name
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="exampleInputEmail1"
+              aria-describedby="emailHelp"
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
           <div className="form-group mb-3">
             <label htmlFor="exampleInputEmail1" className="form-label">
               Email address
@@ -43,7 +59,7 @@ const Login = () => {
             className="btn btn-primary"
             onClick={submitForm}
           >
-            Submit
+            Register
           </button>
         </div>
       </div>
@@ -51,4 +67,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

@@ -1,6 +1,7 @@
 import { Routes, Route, Link } from "react-router-dom";
 import Home from "../components/Home";
 import Login from "../components/Login";
+import Register from "../components/Register";
 
 function Guest() {
   return (
@@ -37,6 +38,15 @@ function Guest() {
                   Login
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link
+                  className="nav-link active"
+                  aria-current="page"
+                  to="/register"
+                >
+                  Register
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -45,6 +55,7 @@ function Guest() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </div>
     </>

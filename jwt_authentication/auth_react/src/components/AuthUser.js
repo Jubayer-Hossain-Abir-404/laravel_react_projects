@@ -13,7 +13,7 @@ const AuthUser = () => {
   }
 
   const getUser = () => {
-    const userString = sessionStorage.getItem("token");
+    const userString = sessionStorage.getItem("user");
     const user_detail = JSON.parse(userString);
     return user_detail;
   };
@@ -38,9 +38,10 @@ const AuthUser = () => {
 
   const http = axios.create({
     baseURL: "http://localhost:8000/api",
-    headers:{
-        "Content-type" : "application/json"
-    }
+    headers: {
+      "Content-type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
   });
 
   return {
