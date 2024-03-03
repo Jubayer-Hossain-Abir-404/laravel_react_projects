@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
+import AuthUser from './AuthUser';
 
 const Login = () => {
+  const {http} = AuthUser();
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
 
     const submitForm = () => {
-        console.log(email + ' '+password);
+        
     }
     return (
       <div className="row justify-content-center pt-5">
