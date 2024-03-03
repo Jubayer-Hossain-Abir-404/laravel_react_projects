@@ -6,6 +6,8 @@ const Login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
+  console.log(setToken);
+
   const submitForm = () => {
     http.post("/login", { email: email, password: password }).then((res) => {
       setToken(res.data.user, res.data.access_token)

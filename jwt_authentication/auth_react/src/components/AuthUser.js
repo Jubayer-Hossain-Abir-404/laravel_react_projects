@@ -31,6 +31,11 @@ const AuthUser = () => {
     navigate('/dashboard');
   }
 
+  const logout = () => {
+    sessionStorage.clear();
+    navigate('/login');
+  }
+
   const http = axios.create({
     baseURL: "http://localhost:8000/api",
     headers:{
@@ -43,7 +48,8 @@ const AuthUser = () => {
     token,
     user,
     getToken,
-    http
+    http,
+    logout
   }
 }
 
