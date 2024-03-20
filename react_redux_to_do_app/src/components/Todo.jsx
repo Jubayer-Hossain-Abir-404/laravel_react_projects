@@ -39,7 +39,7 @@ const Todo = () => {
           <FilterButton />
           <div className="flex items-center mb-4">
             <input value={searchTerm} onChange={(e) => handleSearchChange(e.target.value)} type="text" name="text" id="addTodoInput" placeholder="Search" className="flex-grow p-2 border-b-2 border-gray-300 focus:outline-none focus:border-blue-500"/>
-            <button className="ml-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none" onClick={handleAddToDoClick}><BsSearch /></button>
+            <button className="ml-4 p-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none"><BsSearch /></button>
           </div>
         </div>
 
