@@ -25,13 +25,10 @@ const Students = () => {
         .delete(`http://127.0.0.1:8000/api/students/${studentId}/delete`)
         .then((response) => {
           alert(response.data.message);
-          // const element = document.getElementById("student-" + studentId);
-          // element.remove(); // Removes the div with the 'div-02' id
-
           const row = e.target.closest("tr");
 
           if (row) {
-            row.remove(); // Removes the table row
+            row.remove();
           }
         })
         .catch((err) => {

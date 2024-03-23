@@ -159,9 +159,8 @@ class StudentController extends Controller
             $student->phone = $request->phone;
             $student->course = $request->course;
 
-            if (!empty ($request->isMarried)) {
-                $student->isMarried = $request->isMarried;
-            }
+            $student->isMarried = $request->isMarried ?? 0;
+
             if (!empty ($request->degree_type)) {
                 $student->degree_type = $request->degree_type;
             }

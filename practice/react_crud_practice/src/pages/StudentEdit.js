@@ -33,6 +33,13 @@ const StudentEdit = () => {
       if (e.target.name === "file") {
         setFile(URL.createObjectURL(e.target.files[0]));
         setData({ ...data, [e.target.name]: e.target.files[0] });
+      } 
+      else if (e.target.name === "isMarried") {
+        if (e.target.checked) {
+          setData({ ...data, [e.target.name]: 1 });
+        } else {
+          setData({ ...data, [e.target.name]: 0 });
+        }
       } else {
         setData({ ...data, [e.target.name]: e.target.value });
       }
@@ -264,9 +271,9 @@ const StudentEdit = () => {
                     Select Gender
                   </label>
                   <div className="d-flex">
-                    <div class="form-check me-3">
+                    <div className="form-check me-3">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="radio"
                         name="gender"
                         id="maleGender"
@@ -274,13 +281,13 @@ const StudentEdit = () => {
                         checked={data.gender === "M"}
                         onChange={(e) => setInputData(e)}
                       />
-                      <label class="form-check-label" for="maleGender">
+                      <label className="form-check-label" htmlFor="maleGender">
                         Male
                       </label>
                     </div>
-                    <div class="form-check me-3">
+                    <div className="form-check me-3">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="radio"
                         name="gender"
                         id="femaleGender"
@@ -288,13 +295,16 @@ const StudentEdit = () => {
                         checked={data.gender === "F"}
                         onChange={(e) => setInputData(e)}
                       />
-                      <label class="form-check-label" for="femaleGender">
+                      <label
+                        className="form-check-label"
+                        htmlFor="femaleGender"
+                      >
                         Female
                       </label>
                     </div>
-                    <div class="form-check">
+                    <div className="form-check">
                       <input
-                        class="form-check-input"
+                        className="form-check-input"
                         type="radio"
                         name="gender"
                         id="otherGender"
@@ -302,12 +312,30 @@ const StudentEdit = () => {
                         checked={data.gender === "O"}
                         onChange={(e) => setInputData(e)}
                       />
-                      <label class="form-check-label" for="otherGender">
+                      <label className="form-check-label" htmlFor="otherGender">
                         Other
                       </label>
                     </div>
                   </div>
                 </div>
+
+                <div className="mb-3">
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      value="1"
+                      id="isMarried"
+                      name="isMarried"
+                      onChange={(e) => setInputData(e)}
+                      checked={data.isMarried === 1}
+                    />
+                    <label className="form-check-label" htmlFor="isMarried">
+                      Is Married
+                    </label>
+                  </div>
+                </div>
+
                 <div className="mb-3">
                   <label htmlFor="file" className="form-label">
                     Image Upload
