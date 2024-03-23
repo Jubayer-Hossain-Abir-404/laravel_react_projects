@@ -5,18 +5,21 @@ namespace App\Http\Controllers\Api;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 
 class StudentController extends Controller
 {
     private $base_url;
-    public function __construct(){
+    public function __construct()
+    {
         $this->base_url = url('/');
     }
     public function index()
     {
-        $students = Student::all();
+        //$students = Student::all();
+        $students = DB::table('students')->select()->orderByDesc('id')->get();
 
         if (count($students) > 0) {
             return response()->json([
@@ -57,7 +60,7 @@ class StudentController extends Controller
 
         $file = $request->file('file');
         $save_file = null;
-        if (!empty($file)) {
+        if (!empty ($file)) {
             $file_name = rand(123456, 999999) . '.' . $file->getClientOriginalExtension();
             $file_path = public_path('student_files');
             $file->move($file_path, $file_name);
@@ -75,7 +78,7 @@ class StudentController extends Controller
         $student->degree_type = $request->degree_type ?? null;
         $student->gender = $request->gender ?? null;
 
-        $student->countries = !empty($request->countries) ? implode(",", $request->countries) : null;
+        $student->countries = !empty ($request->countries) ? implode(",", $request->countries) : null;
         $student->range = $request->range ?? 0;
         $response = $student->save();
 
@@ -136,10 +139,10 @@ class StudentController extends Controller
             }
 
             if ($request->hasFile('file')) {
-                if(!empty($student->file)){
+                if (!empty ($student->file)) {
                     $url_info = parse_url($student->file);
-                    if(isset($url_info['path']) && !empty($url_info['path'])){
-                        if (file_exists( public_path() . $url_info['path'])){
+                    if (isset ($url_info['path']) && !empty ($url_info['path'])) {
+                        if (file_exists(public_path() . $url_info['path'])) {
                             unlink(public_path($url_info['path']));
                         }
                     }
@@ -156,21 +159,21 @@ class StudentController extends Controller
             $student->phone = $request->phone;
             $student->course = $request->course;
 
-            if(!empty($request->isMarried)){
+            if (!empty ($request->isMarried)) {
                 $student->isMarried = $request->isMarried;
             }
-            if(!empty($request->degree_type)){
+            if (!empty ($request->degree_type)) {
                 $student->degree_type = $request->degree_type;
             }
 
-            if(!empty($request->gender)){
+            if (!empty ($request->gender)) {
                 $student->gender = $request->gender;
             }
 
-            if(!empty($request->countries)){
+            if (!empty ($request->countries)) {
                 $student->countries = implode(",", $request->countries);
             }
-            if(!empty($request->range)){
+            if (!empty ($request->range)) {
                 $student->range = $request->range;
             }
             if ($student->update()) {

@@ -243,6 +243,8 @@ const StudentAdd = () => {
                         type="radio"
                         name="gender"
                         id="maleGender"
+                        value="M"
+                        onChange={(e) => setInputData(e)}
                       />
                       <label class="form-check-label" for="maleGender">
                         Male
@@ -254,6 +256,8 @@ const StudentAdd = () => {
                         type="radio"
                         name="gender"
                         id="femaleGender"
+                        value="F"
+                        onChange={(e) => setInputData(e)}
                       />
                       <label class="form-check-label" for="femaleGender">
                         Female
@@ -265,6 +269,8 @@ const StudentAdd = () => {
                         type="radio"
                         name="gender"
                         id="otherGender"
+                        value="O"
+                        onChange={(e) => setInputData(e)}
                       />
                       <label class="form-check-label" for="otherGender">
                         Other
