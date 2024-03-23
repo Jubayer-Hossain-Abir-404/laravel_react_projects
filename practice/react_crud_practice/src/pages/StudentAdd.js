@@ -263,7 +263,10 @@ const StudentAdd = () => {
                         value="F"
                         onChange={(e) => setInputData(e)}
                       />
-                      <label className="form-check-label" htmlFor="femaleGender">
+                      <label
+                        className="form-check-label"
+                        htmlFor="femaleGender"
+                      >
                         Female
                       </label>
                     </div>
@@ -297,6 +300,22 @@ const StudentAdd = () => {
                       Is Married
                     </label>
                   </div>
+                </div>
+
+                <div className="mb-3">
+                  <label htmlFor="range" className="form-label">
+                    Range
+                  </label>
+                  <input
+                    type="range"
+                    className="form-range"
+                    min="0"
+                    max="5"
+                    step="1"
+                    onChange={(e) => setInputData(e)}
+                    id="range"
+                    name= "range"
+                  ></input>
                 </div>
 
                 <div className="mb-3">
