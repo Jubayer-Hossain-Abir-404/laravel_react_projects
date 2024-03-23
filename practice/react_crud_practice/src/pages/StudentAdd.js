@@ -231,6 +231,48 @@ const StudentAdd = () => {
                     </div>
                   )}
                 </div>
+
+                <div className="mb-3">
+                  <label htmlFor="gender" className="form-label">
+                    Select Gender
+                  </label>
+                  <div className="d-flex">
+                    <div class="form-check me-3">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="gender"
+                        id="maleGender"
+                      />
+                      <label class="form-check-label" for="maleGender">
+                        Male
+                      </label>
+                    </div>
+                    <div class="form-check me-3">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="gender"
+                        id="femaleGender"
+                      />
+                      <label class="form-check-label" for="femaleGender">
+                        Female
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="gender"
+                        id="otherGender"
+                      />
+                      <label class="form-check-label" for="otherGender">
+                        Other
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="mb-3">
                   <label htmlFor="file" className="form-label">
                     Image Upload

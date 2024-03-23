@@ -25,9 +25,18 @@ const StudentEdit = () => {
     { label: "Pakistan", value: "PAK" },
   ];
 
-  const setInputData = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
-  };
+    const previewURL =
+      "https://as1.ftcdn.net/v2/jpg/05/72/90/54/1000_F_572905428_MwCL0yVHtIUbTGKBQGq0Z2PKuNEdtRLo.jpg";
+    const [file, setFile] = useState(previewURL);
+
+    const setInputData = (e) => {
+      if (e.target.name === "file") {
+        setFile(URL.createObjectURL(e.target.files[0]));
+        setData({ ...data, [e.target.name]: e.target.files[0] });
+      } else {
+        setData({ ...data, [e.target.name]: e.target.value });
+      }
+    };
 
   const [errorMessage, setErrorMessage] = useState();
 
@@ -37,7 +46,16 @@ const StudentEdit = () => {
     axios
       .get(`http://127.0.0.1:8000/api/students/${params.id}/edit`)
       .then((response) => {
-        //console.log(response.data);
+        if (response.data.student.file !== null && response.data.student.file !== "") {
+          setFile(response.data.student.file);
+        } 
+        delete response.data.student.file;
+        if (
+          response.data.student.gender === null ||
+          response.data.student.gender === ""
+        ) {
+          delete response.data.student.gender;
+        } 
         setData(response.data.student);
         setLoader(false);
       })
@@ -62,17 +80,23 @@ const StudentEdit = () => {
   }, [countries, data.countries, selected, allowedSelect]);
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    setLoader(true);
-    let selectedCountries = [];
-    // if (selected.length > 0) {
-    //   selectedCountries = selected.map((x) => x.value);
-    //   setData({ ...data, countries: selectedCountries });
-    // }
+   e.preventDefault();
+   setLoader(true);
+   let selectedCountries = [];
+   const formData = new FormData();
+
+   for (var key in data) {
+     formData.append(key, data[key]);
+   }
+
+   if (selected.length > 0) {
+     selectedCountries = selected.map((x) => x.value);
+     formData.append("countries[]", selectedCountries);
+   }
+   formData.append("_method", "PUT");
     axios
-      .put(`http://127.0.0.1:8000/api/students/${params.id}/edit`, {
-        ...data,
-        countries: selectedCountries,
+      .post(`http://127.0.0.1:8000/api/students/${params.id}/edit`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       })
       .then((response) => {
         setToaster({
@@ -232,6 +256,31 @@ const StudentEdit = () => {
                         return null;
                       })}
                     </div>
+                  )}
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="file" className="form-label">
+                    Image Upload
+                  </label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    id="file"
+                    name="file"
+                    onChange={(e) => setInputData(e)}
+                  />
+                  {file && (
+                    <img
+                      className="my-2"
+                      src={file}
+                      width={"180px"}
+                      height={"160px"}
+                      alt="Display"
+                    />
+                  )}
+                  <br />
+                  {errorMessage && (
+                    <span className="text-danger">{errorMessage.file}</span>
                   )}
                 </div>
                 <button type="submit" className="btn btn-primary">

@@ -120,12 +120,12 @@ class StudentController extends Controller
                 'email' => 'required|email|max:191',
                 'phone' => 'required|digits:11|numeric',
                 'course' => 'required|max:191',
-                'file' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:5000',
+                'file' => 'image|mimes:jpeg,jpg,png,gif|max:5000|nullable',
                 'degree_type' => 'nullable|numeric',
-                'gender' => 'nullable|max:1',
-                'countries' => 'nullable|array',
-                "countries.*" => "nullable|string|distinct|min:2",
-                'range' => 'nullable|numeric',
+                'gender' => 'string|max:1|nullable',
+                'countries' => 'array|nullable',
+                "countries.*" => "string|distinct|min:2|nullable",
+                'range' => 'numeric|nullable',
             ]);
 
             if ($validator->fails()) {
