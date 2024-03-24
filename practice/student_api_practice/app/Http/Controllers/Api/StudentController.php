@@ -19,9 +19,9 @@ class StudentController extends Controller
     public function index()
     {
         //$students = Student::all();
-        $students = DB::table('students')->select()->orderByDesc('id')->get();
+        $students = DB::table('students')->select()->orderByDesc('id')->paginate(5);
 
-        if (count($students) > 0) {
+        if ($students) {
             return response()->json([
                 'status' => 200,
                 'students' => $students,

@@ -1,13 +1,20 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom';
 import Loader from '../component/Loader';
 import  * as Constants  from '../shared/Constant';
 import Toaster from '../component/Toaster';
 
+import Pagination from '../component/pagination/Pagination';
+import "../component/pagination/pagination.css";
+
 const Students = () => {
    const [students, setStudent] = useState([]); 
    const [loader, setLoader] = useState(true);
+
+   const [ currentPage, setCurrentPage ] = useState(1);
+   const [total_items, setTotalItems] = useState(0);
+   const [per_page, setPerPage] = useState(5);
 
      const [toaster, setToaster] = useState({
        state: false,
@@ -18,16 +25,29 @@ const Students = () => {
 
     useEffect(() => {
       axios
-        .get(`http://127.0.0.1:8000/api/students`)
+        .get(`http://127.0.0.1:8000/api/students?page=${currentPage}`)
         .then((response) => {
           setLoader(false);
-          setStudent(response.data.students);
+          setStudent(response.data.students.data);
+
+          setCurrentPage(response.data.students.current_page);
+          setTotalItems(response.data.students.total);
+          setPerPage(response.data.students.per_page);
+
         })
         .catch((error) => {
           setLoader(false);
           console.log(error.response.data.message);
         });
-    },[]);
+    }, [currentPage]);
+
+    // const currentTableData = useMemo(() => {
+    //   const firstPageIndex = (currentPage - 1) * per_page;
+    //   const lastPageIndex = firstPageIndex + per_page;
+    //   return students.slice(firstPageIndex, lastPageIndex);
+    // }, [currentPage, per_page, students]);
+
+    // console.log(currentTableData);
 
     const deleteStudent = (studentId, e) => {
       axios
@@ -38,7 +58,7 @@ const Students = () => {
           if (row) {
              row.remove();
           }
-          
+
           setToaster({
             state: true,
             toastBg: "Success",
@@ -144,6 +164,13 @@ const Students = () => {
                   ))}
                 </tbody>
               </table>
+              <Pagination
+                className="pagination-bar"
+                currentPage={currentPage}
+                totalCount={total_items}
+                pageSize={per_page}
+                onPageChange={(page) => setCurrentPage(page)}
+              />
             </div>
           </div>
         </div>
