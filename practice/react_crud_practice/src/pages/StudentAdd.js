@@ -80,7 +80,10 @@ const StudentAdd = () => {
             toastHeader: "Success",
             toastBodyMessage: response.data.message,
           });
-          navigate("/students");
+
+          setTimeout(() => {
+            navigate("/students");
+          }, 1000);   
         }
       })
       .catch((err) => {
@@ -314,7 +317,8 @@ const StudentAdd = () => {
                     step="1"
                     onChange={(e) => setInputData(e)}
                     id="range"
-                    name= "range"
+                    name="range"
+                    value={data.range ?? 0}
                   ></input>
                 </div>
 

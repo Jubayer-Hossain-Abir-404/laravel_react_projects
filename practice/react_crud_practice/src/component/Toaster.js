@@ -10,6 +10,7 @@ const Toaster = (props) => {
         <Toast
           className="d-inline-block m-2 position-absolute end-0"
           bg={props.data.toastBg.toLowerCase()}
+          style={{ zIndex: 100 }}
           onClose={() => setShow(false)}
           show={show}
           delay={3000}
