@@ -1,93 +1,103 @@
-import axios from 'axios';
-import React, { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom';
-import Loader from '../component/Loader';
-import  * as Constants  from '../shared/Constant';
-import Toaster from '../component/Toaster';
+import axios from "axios";
+import React, {
+  useEffect,
+  // useMemo,
+  useState,
+} from "react";
+import { Link } from "react-router-dom";
+import Loader from "../component/Loader";
+import * as Constants from "../shared/Constant";
+import Toaster from "../component/Toaster";
 
-import Pagination from '../component/pagination/Pagination';
+import Pagination from "../component/pagination/Pagination";
 import "../component/pagination/pagination.css";
 
 const Students = () => {
-   const [students, setStudent] = useState([]); 
-   const [loader, setLoader] = useState(true);
+  const [students, setStudent] = useState([]);
+  const [loader, setLoader] = useState(true);
 
-   const [ currentPage, setCurrentPage ] = useState(1);
-   const [total_items, setTotalItems] = useState(0);
-   const [per_page, setPerPage] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [total_items, setTotalItems] = useState(0);
+  const [per_page, setPerPage] = useState(5);
 
-     const [toaster, setToaster] = useState({
-       state: false,
-       toastBg: "",
-       toastHeader: "",
-       toastBodyMessage: "",
-     });
+  const [toaster, setToaster] = useState({
+    state: false,
+    toastBg: "",
+    toastHeader: "",
+    toastBodyMessage: "",
+  });
 
-    useEffect(() => {
-      axios
-        .get(`http://127.0.0.1:8000/api/students?page=${currentPage}`)
-        .then((response) => {
-          setLoader(false);
-          setStudent(response.data.students.data);
+  const [reloadFlag, setReloadFlag] = useState(false); // Flag to trigger re-render
 
-          setCurrentPage(response.data.students.current_page);
-          setTotalItems(response.data.students.total);
-          setPerPage(response.data.students.per_page);
+  const fetchData = () => {
+    axios
+      .get(`http://127.0.0.1:8000/api/students?page=${currentPage}`)
+      .then((response) => {
+        setLoader(false);
+        setStudent(response.data.students.data);
+        setTotalItems(response.data.students.total);
+        setPerPage(response.data.students.per_page);
 
-        })
-        .catch((error) => {
-          setLoader(false);
-          console.log(error.response.data.message);
+        if (students.length === 1 && currentPage > 1) {
+          setCurrentPage((prevPage) => prevPage - 1);
+        }
+      })
+      .catch((error) => {
+        setLoader(false);
+        console.log(error.response.data.message);
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, reloadFlag]);
+
+  // const currentTableData = useMemo(() => {
+  //   const firstPageIndex = (currentPage - 1) * per_page;
+  //   const lastPageIndex = firstPageIndex + per_page;
+  //   return students.slice(firstPageIndex, lastPageIndex);
+  // }, [currentPage, per_page, students]);
+
+  const deleteStudent = (studentId, e) => {
+    axios
+      .delete(`http://127.0.0.1:8000/api/students/${studentId}/delete`)
+      .then((response) => {
+        // const row = e.target.closest("tr");
+        // if (row) {
+        //   row.remove();
+        // }
+
+        setReloadFlag((prevFlag) => !prevFlag); // Toggle reload flag to force re-render
+        setToaster({
+          state: true,
+          toastBg: "Success",
+          toastHeader: "Success",
+          toastBodyMessage: response.data.message,
         });
-    }, [currentPage]);
-
-    // const currentTableData = useMemo(() => {
-    //   const firstPageIndex = (currentPage - 1) * per_page;
-    //   const lastPageIndex = firstPageIndex + per_page;
-    //   return students.slice(firstPageIndex, lastPageIndex);
-    // }, [currentPage, per_page, students]);
-
-    // console.log(currentTableData);
-
-    const deleteStudent = (studentId, e) => {
-      axios
-        .delete(`http://127.0.0.1:8000/api/students/${studentId}/delete`)
-        .then((response) => {
-          const row = e.target.closest("tr");
-        
-          if (row) {
-             row.remove();
-          }
-
+      })
+      .catch((err) => {
+        if (err.response) {
+          console.log(err.response);
           setToaster({
             state: true,
-            toastBg: "Success",
-            toastHeader: "Success",
-            toastBodyMessage: response.data.message,
+            toastBg: "Danger",
+            toastHeader: "Error",
+            toastBodyMessage: err.response.data.message,
           });
-        })
-        .catch((err) => {
-          if (err.response) {
-            console.log(err.response);
-            setToaster({
-              state: true,
-              toastBg: "Danger",
-              toastHeader: "Error",
-              toastBodyMessage: err.response.data.message,
-            });
-          }
-        });
-      setToaster({
-        state: false,
-        toastBg: "",
-        toastHeader: "",
-        toastBodyMessage: "",
+        }
       });
-    }
+    setToaster({
+      state: false,
+      toastBg: "",
+      toastHeader: "",
+      toastBodyMessage: "",
+    });
+  };
 
-    if (loader) {
-      return <Loader />;
-    }
+  if (loader) {
+    return <Loader />;
+  }
 
   return (
     <>
@@ -177,6 +187,6 @@ const Students = () => {
       </div>
     </>
   );
-}
+};
 
-export default Students
+export default Students;
