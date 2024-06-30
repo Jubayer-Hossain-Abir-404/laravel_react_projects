@@ -6,15 +6,12 @@ namespace App\Repositories;
 
 use App\Http\Requests\PlanRequest;
 use App\Models\Plan;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\DB;
-use Symfony\Component\CssSelector\Exception\InternalErrorException;
 
 class PlanRepository implements Repository
 {
     public function paginate(array $filters = [])
     {
-        
+
     }
 
     public function save(PlanRequest $request, $plan)

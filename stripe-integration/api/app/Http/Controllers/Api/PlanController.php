@@ -17,6 +17,7 @@ class PlanController extends Controller
     public function __construct(private PlanRepository $repository, private PlanService $service)
     {
     }
+
     public function index()
     {
         return response()->json(['data' => $this->repository->getList()], Res::HTTP_OK);
@@ -27,7 +28,7 @@ class PlanController extends Controller
      */
     public function create()
     {
-        
+
     }
 
     /**
@@ -36,10 +37,11 @@ class PlanController extends Controller
     public function store(PlanRequest $request)
     {
         $data = $this->service->save($request);
+
         return response()->json([
             'message' => 'Plan created successfully',
             'data' => $data,
-        ], !empty($data) ? Res::HTTP_CREATED  : Res::HTTP_INTERNAL_SERVER_ERROR);
+        ], !empty($data) ? Res::HTTP_CREATED : Res::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**

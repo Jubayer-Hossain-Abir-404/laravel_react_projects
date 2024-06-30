@@ -3,9 +3,9 @@
 namespace App\Services;
 
 use App\Http\Requests\PlanRequest;
-use Stripe\StripeClient;
 use App\Repositories\PlanRepository;
 use Illuminate\Support\Facades\DB;
+use Stripe\StripeClient;
 use Symfony\Component\CssSelector\Exception\InternalErrorException;
 
 class PlanService
@@ -14,6 +14,7 @@ class PlanService
      * Create a new class instance.
      */
     protected $stripe;
+
     public function __construct(StripeClient $stripe, private PlanRepository $repository)
     {
         $this->stripe = $stripe;
@@ -36,9 +37,11 @@ class PlanService
             if ($plan && $plan->active) {
                 $newPlan = $this->repository->save($request, $plan);
                 DB::commit();
+
                 return $newPlan;
             }
             DB::rollBack();
+
             return [];
         } catch (\Exception $e) {
             DB::rollBack();
