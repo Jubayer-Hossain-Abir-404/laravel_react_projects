@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->decimal('price', 8, 2);
             $table->string('interval');
             $table->integer('trial_period_days')->nullable();
-            $table->string('stripe_paln_id');
+            $table->string('stripe_plan_id');
             $table->string('lookup_key');
             $table->timestamps();
         });

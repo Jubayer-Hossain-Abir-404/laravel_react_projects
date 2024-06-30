@@ -9,8 +9,15 @@ Route::group(['namespace' => 'App\Http\Controllers\Api', 'prefix' => 'v1'], func
     });
 });
 
-Route::middleware(['auth:sanctum'])
-    ->prefix('v1')
+// Route::middleware(['auth:sanctum'])
+//     ->prefix('v1')
+//     ->namespace('App\Http\Controllers\Api')
+//     ->group(function () {
+//         Route::resource('plans', 'PlanController');
+//         Route::post('/checkout/{id}', 'PaymentController@checkout');
+//     });
+
+Route::prefix('v1')
     ->namespace('App\Http\Controllers\Api')
     ->group(function () {
         Route::resource('plans', 'PlanController');
