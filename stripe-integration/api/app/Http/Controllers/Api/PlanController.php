@@ -39,9 +39,9 @@ class PlanController extends Controller
         $data = $this->service->save($request);
 
         return response()->json([
-            'message' => 'Plan created successfully',
+            'message' => !empty($data) ? 'Plan created successfully' : 'Failed to create plan',
             'data' => $data,
-        ], !empty($data) ? Res::HTTP_CREATED : Res::HTTP_INTERNAL_SERVER_ERROR);
+        ], !empty($data) ? Res::HTTP_CREATED : Res::HTTP_BAD_REQUEST);
     }
 
     /**

@@ -4,12 +4,18 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as Res;
+use App\Models\Plan;
+use App\Services\PaymentService;
 
 class PaymentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    public function __construct(private PaymentService $service)
+    {
+    }
     public function index()
     {
         //
@@ -61,5 +67,11 @@ class PaymentController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function checkout(Plan $plan)
+    {
+        $data = $this->service->save($plan);
+        return response()->json(['data' => $data], Res::HTTP_OK);
     }
 }
