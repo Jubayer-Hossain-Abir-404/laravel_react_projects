@@ -72,6 +72,36 @@ class PaymentController extends Controller
     public function checkout(Plan $plan)
     {
         $data = $this->service->save($plan);
-        return response()->json(['data' => $data], Res::HTTP_OK);
+        return response()->json(
+            [
+                'data' => $data,
+                'message' => 'CheckOut Successful'
+            ], 
+        Res::HTTP_OK);
+    }
+
+    public function success(Request $request)
+    {
+        $data = $this->service->success($request->session_id);
+        
+        return response()->json(
+            [
+                'data' => $data,
+                'message' => !empty($data) ? 'Payment Successful' : 'Payment Failed'
+            ],
+            !empty($data) ? Res::HTTP_OK : Res::HTTP_BAD_REQUEST
+        );
+    }
+
+    public function cancel()
+    {
+        $this->service->cancel();
+
+        return response()->json(
+            [
+                'message' => 'Payment Cancelled'
+            ],
+            Res::HTTP_OK
+        );
     }
 }
